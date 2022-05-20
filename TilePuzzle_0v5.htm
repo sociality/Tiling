@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content=charset=utf-8 />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Greg Gomberg" />
+    <title>Tile Puzzles 0v0</title>
+    <style>
+        /* Classes for the main block and the */
+        /* main variant blocks shown in it */
+        
+        .GG_maindiv {
+            position: static;
+            margin: 5px;
+            bottom: 50px;
+        }
+        
+        .GG_variant {}
+        /* The main variant is structured as rows */
+        /* containing cells with one generic and */
+        /* several specific classes. */
+        
+        .GG_row {
+            width: 95%;
+            clear: both;
+        }
+        
+        .GG_clueRow {
+            padding: 5px;
+            border: thin solid black;
+        }
+        /* The GG_rowPadding class is to go after */
+        /* floating elements and so expand the */
+        /* enclosing div to include them. */
+        
+        .GG_rowPadding {
+            clear: both;
+        }
+        /* Put "cells" in two equal columns ... */
+        
+        .GG_cell {
+            float: left;
+            width: 50%;
+        }
+        /* but make space between Q and A columns */
+        
+        .quizCellA {
+            float: right;
+            width: 50%;
+            overflow: hidden;
+        }
+        
+        .quizCellQ {
+            float: left;
+            width: 45%;
+        }
+        /* ... but not if the browser window is too narrow */
+        /* (Based on an example linked from the */
+        /* w3schools.com page on 'CSS Website Layout'*/
+        
+        @media screen and (max-width: 1000px) {
+            .GG_cell {
+                width: 100%;
+            }
+            .quizCellA {
+                width: 100%;
+            }
+            .quizCellQ {
+                width: 100%;
+            }
+        }
+        
+        .boardCell {
+            max-width: 480px;
+        }
+        
+        .textCell {}
+        /* Classes for elements within the blocks above */
+        
+        .GG_explanation {
+            max-width: 700px;
+        }
+        /* extend explanation paragraphs to level up the buttons */
+        /* provided the browser window is wide enough for two-column layout */
+        
+        @media screen and (min-width: 1000px) {
+            .GG_explanation_paras {
+                min-height: 380px;
+            }
+        }
+        
+        .GG_textHeading {}
+        
+        .GG_textHeading {}
+        /* Navigation and various classes of button */
+        
+        .GG_navigation {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .boardButton {
+            font-size: 100%;
+            margin: 0px 10px 15px 10px;
+            */
+        }
+        
+        .textButton {
+            font-size: 100%;
+        }
+        
+        .centreButton {}
+        
+        .leftButton {
+            float: left;
+            margin-left: 20px;
+        }
+        
+        .rightButton {
+            float: right;
+            margin-right: 20px;
+        }
+        /* Copyright notice is in the footer below everything else. */
+        
+        #footerDiv {
+            position: static;
+            text-align: left;
+            padding-top: 30px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .copyrightNotice {
+            font-size: 60%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Each page displayed has the same title at the top. -->
+    <div>
+        <h1>Tile Puzzles</h1>
+    </div>
+    <div class="GG_maindiv">
+        <!--  -->
+        <!-- After that there are two main variants (each represented by a division:  -->
+        <!--  variant 1. Introductory page - essentially a single black of text flowed over one or two columns -->
+        <!--  variant 2, puzzle board and text in one or two columns -->
+        <!--  -->
+        <!--  variant 1. Introductory page -->
+        <div id="div_Introduction" class="GG_variant">
+            <!-- INTRODUCTION -->
+            <div id="GG_textIntro" class="GG_explanation">
+                <div id="GG_textIntro_paras" class="GG_explanation_paras">
+                    <h2 class="GG_textHeading">Introduction</h2>
+                    <p>Here are some examples of an old family of puzzles for your amusement.</p>
+                    <p>This presentation of the puzzles started out as part of an argument about types of thinking, but this version is just for fun. We hope you enjoy it.</p>
+                    <p></p>
+                    <p>&copy; Greg Gomberg August 2020</p>
+                </div>
+                <!-- end of GG_textIntro_paras -->
+                <div id="introNavigation" class="GG_navigation">
+                    <button type="button" class="textButton centreButton" onclick="showPage0()">Next</button>
+                </div>
+            </div>
+            <!-- end of GG_GG_textIntro -->
+        </div>
+        <!-- end of GGdiv_Introduction  variant -->
+        <!--  -->
+        <!--  variant 2. Main page layout - puzzle board and text -->
+        <!--  -->
+        <!-- This variant is a grid of HTML divs in which the first row has the puzzle board in the first column -->
+        <!-- and the explanatory text in the second column. -->
+        <!-- The board is always the same SVG structure; the explanatory text (including navigation buttons) -->
+        <!-- varies from page to page. -->
+        <!-- Subsequet rows may contain other material if needed.  -->
+        <!-- The HTML/CSS technique is based on that shown in the w3schools.com article "CSS Web Page layout" -->
+        <!-- As it happens this grid does not use the display:grid; property -->
+        <div id="div_MainVariant" class="GG_variant">
+            <div id="mainVariant_row_1" class="GG_row">
+                <div id="mainVariant_board" class="GG_cell boardCell">
+                    <svg width="460" height="460">
+      <!-- Tile segments first (behind cell rectangles for click sensitivity) -->
+      <!-- Segment in the centre of each cell -->
+       <rect id="SVG_Seg_1_1_M" x="40" y="40" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_2_M" x="90" y="40" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_3_M" x="140" y="40" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_4_M" x="190" y="40" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_5_M" x="240" y="40" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_6_M" x="290" y="40" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_7_M" x="340" y="40" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_8_M" x="390" y="40" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_1_M" x="40" y="90" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_2_M" x="90" y="90" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_3_M" x="140" y="90" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_4_M" x="190" y="90" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_5_M" x="240" y="90" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_6_M" x="290" y="90" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_7_M" x="340" y="90" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_8_M" x="390" y="90" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_1_M" x="40" y="140" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_2_M" x="90" y="140" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_3_M" x="140" y="140" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_4_M" x="190" y="140" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_5_M" x="240" y="140" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_6_M" x="290" y="140" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_7_M" x="340" y="140" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_8_M" x="390" y="140" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_1_M" x="40" y="190" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_2_M" x="90" y="190" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_3_M" x="140" y="190" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_4_M" x="190" y="190" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_5_M" x="240" y="190" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_6_M" x="290" y="190" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_7_M" x="340" y="190" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_8_M" x="390" y="190" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_1_M" x="40" y="240" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_2_M" x="90" y="240" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_3_M" x="140" y="240" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_4_M" x="190" y="240" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_5_M" x="240" y="240" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_6_M" x="290" y="240" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_7_M" x="340" y="240" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_8_M" x="390" y="240" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_1_M" x="40" y="290" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_2_M" x="90" y="290" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_3_M" x="140" y="290" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_4_M" x="190" y="290" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_5_M" x="240" y="290" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_6_M" x="290" y="290" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_7_M" x="340" y="290" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_8_M" x="390" y="290" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_1_M" x="40" y="340" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_2_M" x="90" y="340" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_3_M" x="140" y="340" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_4_M" x="190" y="340" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_5_M" x="240" y="340" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_6_M" x="290" y="340" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_7_M" x="340" y="340" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_8_M" x="390" y="340" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_1_M" x="40" y="390" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_2_M" x="90" y="390" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_3_M" x="140" y="390" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_4_M" x="190" y="390" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_5_M" x="240" y="390" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_6_M" x="290" y="390" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_7_M" x="340" y="390" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_8_M" x="390" y="390" width="30" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+
+      <!-- Segment joining centre to left hand border of each cell -->
+       <rect id="SVG_Seg_1_1_L" x="30" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_2_L" x="80" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_3_L" x="130" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_4_L" x="180" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_5_L" x="230" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_6_L" x="280" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_7_L" x="330" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_8_L" x="380" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_1_L" x="30" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_2_L" x="80" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_3_L" x="130" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_4_L" x="180" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_5_L" x="230" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_6_L" x="280" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_7_L" x="330" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_8_L" x="380" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_1_L" x="30" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_2_L" x="80" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_3_L" x="130" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_4_L" x="180" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_5_L" x="230" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_6_L" x="280" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_7_L" x="330" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_8_L" x="380" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_1_L" x="30" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_2_L" x="80" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_3_L" x="130" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_4_L" x="180" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_5_L" x="230" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_6_L" x="280" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_7_L" x="330" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_8_L" x="380" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_1_L" x="30" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_2_L" x="80" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_3_L" x="130" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_4_L" x="180" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_5_L" x="230" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_6_L" x="280" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_7_L" x="330" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_8_L" x="380" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_1_L" x="30" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_2_L" x="80" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_3_L" x="130" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_4_L" x="180" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_5_L" x="230" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_6_L" x="280" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_7_L" x="330" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_8_L" x="380" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_1_L" x="30" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_2_L" x="80" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_3_L" x="130" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_4_L" x="180" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_5_L" x="230" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_6_L" x="280" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_7_L" x="330" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_8_L" x="380" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_1_L" x="30" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_2_L" x="80" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_3_L" x="130" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_4_L" x="180" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_5_L" x="230" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_6_L" x="280" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_7_L" x="330" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_8_L" x="380" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+ 
+      <!-- Segment joining centre to right hand border of each cell -->
+       <rect id="SVG_Seg_1_1_R" x="70" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_2_R" x="120" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_3_R" x="170" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_4_R" x="220" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_5_R" x="270" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_6_R" x="320" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_7_R" x="370" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_8_R" x="420" y="40" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_1_R" x="70" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_2_R" x="120" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_3_R" x="170" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_4_R" x="220" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_5_R" x="270" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_6_R" x="320" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_7_R" x="370" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_8_R" x="420" y="90" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_1_R" x="70" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_2_R" x="120" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_3_R" x="170" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_4_R" x="220" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_5_R" x="270" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_6_R" x="320" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_7_R" x="370" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_8_R" x="420" y="140" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_1_R" x="70" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_2_R" x="120" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_3_R" x="170" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_4_R" x="220" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_5_R" x="270" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_6_R" x="320" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_7_R" x="370" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_8_R" x="420" y="190" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_1_R" x="70" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_2_R" x="120" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_3_R" x="170" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_4_R" x="220" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_5_R" x="270" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_6_R" x="320" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_7_R" x="370" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_8_R" x="420" y="240" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_1_R" x="70" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_2_R" x="120" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_3_R" x="170" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_4_R" x="220" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_5_R" x="270" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_6_R" x="320" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_7_R" x="370" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_8_R" x="420" y="290" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_1_R" x="70" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_2_R" x="120" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_3_R" x="170" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_4_R" x="220" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_5_R" x="270" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_6_R" x="320" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_7_R" x="370" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_8_R" x="420" y="340" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_1_R" x="70" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_2_R" x="120" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_3_R" x="170" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_4_R" x="220" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_5_R" x="270" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_6_R" x="320" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_7_R" x="370" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_8_R" x="420" y="390" width="10" height="30" fill="red" fill-opacity="1" stroke-width="0" />
+  
+      <!-- Segment joining centre to top border of each cell -->
+       <rect id="SVG_Seg_1_1_T" x="40" y="30" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_2_T" x="90" y="30" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_3_T" x="140" y="30" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_4_T" x="190" y="30" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_5_T" x="240" y="30" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_6_T" x="290" y="30" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_7_T" x="340" y="30" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_8_T" x="390" y="30" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_1_T" x="40" y="80" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_2_T" x="90" y="80" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_3_T" x="140" y="80" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_4_T" x="190" y="80" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_5_T" x="240" y="80" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_6_T" x="290" y="80" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_7_T" x="340" y="80" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_8_T" x="390" y="80" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_1_T" x="40" y="130" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_2_T" x="90" y="130" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_3_T" x="140" y="130" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_4_T" x="190" y="130" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_5_T" x="240" y="130" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_6_T" x="290" y="130" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_7_T" x="340" y="130" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_8_T" x="390" y="130" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_1_T" x="40" y="180" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_2_T" x="90" y="180" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_3_T" x="140" y="180" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_4_T" x="190" y="180" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_5_T" x="240" y="180" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_6_T" x="290" y="180" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_7_T" x="340" y="180" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_8_T" x="390" y="180" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_1_T" x="40" y="230" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_2_T" x="90" y="230" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_3_T" x="140" y="230" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_4_T" x="190" y="230" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_5_T" x="240" y="230" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_6_T" x="290" y="230" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_7_T" x="340" y="230" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_8_T" x="390" y="230" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_1_T" x="40" y="280" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_2_T" x="90" y="280" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_3_T" x="140" y="280" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_4_T" x="190" y="280" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_5_T" x="240" y="280" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_6_T" x="290" y="280" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_7_T" x="340" y="280" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_8_T" x="390" y="280" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_1_T" x="40" y="330" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_2_T" x="90" y="330" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_3_T" x="140" y="330" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_4_T" x="190" y="330" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_5_T" x="240" y="330" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_6_T" x="290" y="330" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_7_T" x="340" y="330" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_8_T" x="390" y="330" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_1_T" x="40" y="380" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_2_T" x="90" y="380" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_3_T" x="140" y="380" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_4_T" x="190" y="380" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_5_T" x="240" y="380" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_6_T" x="290" y="380" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_7_T" x="340" y="380" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_8_T" x="390" y="380" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+ 
+      <!-- Segment joining centre to bottom border of each cell -->
+       <rect id="SVG_Seg_1_1_B" x="40" y="70" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_2_B" x="90" y="70" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_3_B" x="140" y="70" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_4_B" x="190" y="70" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_5_B" x="240" y="70" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_6_B" x="290" y="70" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_7_B" x="340" y="70" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_1_8_B" x="390" y="70" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_1_B" x="40" y="120" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_2_B" x="90" y="120" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_3_B" x="140" y="120" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_4_B" x="190" y="120" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_5_B" x="240" y="120" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_6_B" x="290" y="120" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_7_B" x="340" y="120" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_2_8_B" x="390" y="120" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_1_B" x="40" y="170" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_2_B" x="90" y="170" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_3_B" x="140" y="170" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_4_B" x="190" y="170" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_5_B" x="240" y="170" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_6_B" x="290" y="170" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_7_B" x="340" y="170" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_3_8_B" x="390" y="170" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_1_B" x="40" y="220" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_2_B" x="90" y="220" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_3_B" x="140" y="220" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_4_B" x="190" y="220" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_5_B" x="240" y="220" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_6_B" x="290" y="220" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_7_B" x="340" y="220" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_4_8_B" x="390" y="220" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_1_B" x="40" y="270" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_2_B" x="90" y="270" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_3_B" x="140" y="270" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_4_B" x="190" y="270" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_5_B" x="240" y="270" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_6_B" x="290" y="270" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_7_B" x="340" y="270" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_5_8_B" x="390" y="270" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_1_B" x="40" y="320" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_2_B" x="90" y="320" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_3_B" x="140" y="320" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_4_B" x="190" y="320" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_5_B" x="240" y="320" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_6_B" x="290" y="320" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_7_B" x="340" y="320" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_6_8_B" x="390" y="320" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_1_B" x="40" y="370" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_2_B" x="90" y="370" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_3_B" x="140" y="370" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_4_B" x="190" y="370" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_5_B" x="240" y="370" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_6_B" x="290" y="370" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_7_B" x="340" y="370" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_7_8_B" x="390" y="370" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_1_B" x="40" y="420" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_2_B" x="90" y="420" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_3_B" x="140" y="420" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_4_B" x="190" y="420" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_5_B" x="240" y="420" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_6_B" x="290" y="420" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_7_B" x="340" y="420" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+       <rect id="SVG_Seg_8_8_B" x="390" y="420" width="30" height="10" fill="red" fill-opacity="1" stroke-width="0" />
+ 
+      <!-- Draw the 8 x 8 grid of squares on top of the tile segments -->
+       <rect id="SVG_Cell_1_1" x="30" y="30" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(1,1) onmouseout=GG_cellExit(1,1) />
+       <rect id="SVG_Cell_1_2" x="80" y="30" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(1,2) onmouseout=GG_cellExit(1,2) />
+       <rect id="SVG_Cell_1_3" x="130" y="30" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(1,3) onmouseout=GG_cellExit(1,3) />
+       <rect id="SVG_Cell_1_4" x="180" y="30" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(1,4) onmouseout=GG_cellExit(1,4) />
+       <rect id="SVG_Cell_1_5" x="230" y="30" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(1,5) onmouseout=GG_cellExit(1,5) />
+       <rect id="SVG_Cell_1_6" x="280" y="30" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(1,6) onmouseout=GG_cellExit(1,6) />
+       <rect id="SVG_Cell_1_7" x="330" y="30" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(1,7) onmouseout=GG_cellExit(1,7) />
+       <rect id="SVG_Cell_1_8" x="380" y="30" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(1,8) onmouseout=GG_cellExit(1,8) />
+       <rect id="SVG_Cell_2_1" x="30" y="80" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(2,1) onmouseout=GG_cellExit(2,1) />
+       <rect id="SVG_Cell_2_2" x="80" y="80" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(2,2) onmouseout=GG_cellExit(2,2) />
+       <rect id="SVG_Cell_2_3" x="130" y="80" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(2,3) onmouseout=GG_cellExit(2,3) />
+       <rect id="SVG_Cell_2_4" x="180" y="80" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(2,4) onmouseout=GG_cellExit(2,4) />
+       <rect id="SVG_Cell_2_5" x="230" y="80" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(2,5) onmouseout=GG_cellExit(2,5) />
+       <rect id="SVG_Cell_2_6" x="280" y="80" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(2,6) onmouseout=GG_cellExit(2,6) />
+       <rect id="SVG_Cell_2_7" x="330" y="80" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(2,7) onmouseout=GG_cellExit(2,7) />
+       <rect id="SVG_Cell_2_8" x="380" y="80" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(2,8) onmouseout=GG_cellExit(2,8) />
+       <rect id="SVG_Cell_3_1" x="30" y="130" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(3,1) onmouseout=GG_cellExit(3,1) />
+       <rect id="SVG_Cell_3_2" x="80" y="130" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(3,2) onmouseout=GG_cellExit(3,2) />
+       <rect id="SVG_Cell_3_3" x="130" y="130" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(3,3) onmouseout=GG_cellExit(3,3) />
+       <rect id="SVG_Cell_3_4" x="180" y="130" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(3,4) onmouseout=GG_cellExit(3,4) />
+       <rect id="SVG_Cell_3_5" x="230" y="130" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(3,5) onmouseout=GG_cellExit(3,5) />
+       <rect id="SVG_Cell_3_6" x="280" y="130" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(3,6) onmouseout=GG_cellExit(3,6) />
+       <rect id="SVG_Cell_3_7" x="330" y="130" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(3,7) onmouseout=GG_cellExit(3,7) />
+       <rect id="SVG_Cell_3_8" x="380" y="130" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(3,8) onmouseout=GG_cellExit(3,8) />
+       <rect id="SVG_Cell_4_1" x="30" y="180" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(4,1) onmouseout=GG_cellExit(4,1) />
+       <rect id="SVG_Cell_4_2" x="80" y="180" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(4,2) onmouseout=GG_cellExit(4,2) />
+       <rect id="SVG_Cell_4_3" x="130" y="180" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(4,3) onmouseout=GG_cellExit(4,3) />
+       <rect id="SVG_Cell_4_4" x="180" y="180" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(4,4) onmouseout=GG_cellExit(4,4) />
+       <rect id="SVG_Cell_4_5" x="230" y="180" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(4,5) onmouseout=GG_cellExit(4,5) />
+       <rect id="SVG_Cell_4_6" x="280" y="180" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(4,6) onmouseout=GG_cellExit(4,6) />
+       <rect id="SVG_Cell_4_7" x="330" y="180" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(4,7) onmouseout=GG_cellExit(4,7) />
+       <rect id="SVG_Cell_4_8" x="380" y="180" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(4,8) onmouseout=GG_cellExit(4,8) />
+       <rect id="SVG_Cell_5_1" x="30" y="230" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(5,1) onmouseout=GG_cellExit(5,1) />
+       <rect id="SVG_Cell_5_2" x="80" y="230" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(5,2) onmouseout=GG_cellExit(5,2) />
+       <rect id="SVG_Cell_5_3" x="130" y="230" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(5,3) onmouseout=GG_cellExit(5,3) />
+       <rect id="SVG_Cell_5_4" x="180" y="230" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(5,4) onmouseout=GG_cellExit(5,4) />
+       <rect id="SVG_Cell_5_5" x="230" y="230" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(5,5) onmouseout=GG_cellExit(5,5) />
+       <rect id="SVG_Cell_5_6" x="280" y="230" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(5,6) onmouseout=GG_cellExit(5,6) />
+       <rect id="SVG_Cell_5_7" x="330" y="230" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(5,7) onmouseout=GG_cellExit(5,7) />
+       <rect id="SVG_Cell_5_8" x="380" y="230" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(5,8) onmouseout=GG_cellExit(5,8) />
+       <rect id="SVG_Cell_6_1" x="30" y="280" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(6,1) onmouseout=GG_cellExit(6,1) />
+       <rect id="SVG_Cell_6_2" x="80" y="280" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(6,2) onmouseout=GG_cellExit(6,2) />
+       <rect id="SVG_Cell_6_3" x="130" y="280" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(6,3) onmouseout=GG_cellExit(6,3) />
+       <rect id="SVG_Cell_6_4" x="180" y="280" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(6,4) onmouseout=GG_cellExit(6,4) />
+       <rect id="SVG_Cell_6_5" x="230" y="280" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(6,5) onmouseout=GG_cellExit(6,5) />
+       <rect id="SVG_Cell_6_6" x="280" y="280" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(6,6) onmouseout=GG_cellExit(6,6) />
+       <rect id="SVG_Cell_6_7" x="330" y="280" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(6,7) onmouseout=GG_cellExit(6,7) />
+       <rect id="SVG_Cell_6_8" x="380" y="280" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(6,8) onmouseout=GG_cellExit(6,8) />
+       <rect id="SVG_Cell_7_1" x="30" y="330" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(7,1) onmouseout=GG_cellExit(7,1) />
+       <rect id="SVG_Cell_7_2" x="80" y="330" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(7,2) onmouseout=GG_cellExit(7,2) />
+       <rect id="SVG_Cell_7_3" x="130" y="330" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(7,3) onmouseout=GG_cellExit(7,3) />
+       <rect id="SVG_Cell_7_4" x="180" y="330" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(7,4) onmouseout=GG_cellExit(7,4) />
+       <rect id="SVG_Cell_7_5" x="230" y="330" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(7,5) onmouseout=GG_cellExit(7,5) />
+       <rect id="SVG_Cell_7_6" x="280" y="330" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(7,6) onmouseout=GG_cellExit(7,6) />
+       <rect id="SVG_Cell_7_7" x="330" y="330" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(7,7) onmouseout=GG_cellExit(7,7) />
+       <rect id="SVG_Cell_7_8" x="380" y="330" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(7,8) onmouseout=GG_cellExit(7,8) />
+       <rect id="SVG_Cell_8_1" x="30" y="380" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(8,1) onmouseout=GG_cellExit(8,1) />
+       <rect id="SVG_Cell_8_2" x="80" y="380" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(8,2) onmouseout=GG_cellExit(8,2) />
+       <rect id="SVG_Cell_8_3" x="130" y="380" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(8,3) onmouseout=GG_cellExit(8,3) />
+       <rect id="SVG_Cell_8_4" x="180" y="380" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(8,4) onmouseout=GG_cellExit(8,4) />
+       <rect id="SVG_Cell_8_5" x="230" y="380" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(8,5) onmouseout=GG_cellExit(8,5) />
+       <rect id="SVG_Cell_8_6" x="280" y="380" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(8,6) onmouseout=GG_cellExit(8,6) />
+       <rect id="SVG_Cell_8_7" x="330" y="380" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(8,7) onmouseout=GG_cellExit(8,7) />
+       <rect id="SVG_Cell_8_8" x="380" y="380" width="50" height="50" fill="black" fill-opacity="0" stroke-width="2" stroke="black" onclick=GG_cellClick(8,8) onmouseout=GG_cellExit(8,8) />
+      </svg>
+                    <div id="boardNavigation" class="GG_navigation">
+                        <button type="button" class="boardButton" onclick="clearBoard()">Clear board</button>
+                    </div>
+                </div>
+                <!-- end of mainVariant_board -->
+                <div id="mainVariant_text" class="GG_cell textCell">
+                    <!--  -->
+                    <!-- This cell contains a different alternative element for each of the pages with a puzzle board display -->
+                    <!-- The Javascript should control visibility so that no more than one is displayed at any time. -->
+                    <!-- PAGE ZERO - the puzzle board -->
+                    <div id="GG_text0" class="GG_explanation">
+                        <h2 class="GG_textHeading">Puzzle board</h2>
+                        <div id="GG_text0_paras" class="GG_explanation_paras">
+                            <p>The puzzle question is always: &quot;can you cover all the blank squares with marker tiles?&quot; Each tile covers two adjacent squares and cannot overlap another tile. This first board is not much of a puzzle; Please use it
+                                to get to know how this implementation of the puzzles works: </p>
+                            <ul>
+                                <li>Click or tap a blank square to add a marker tile </li>
+                                <li>Click a marker tile to rotate it</li>
+                                <li>Click the same marked square several times to rotate the tile through its valid positions and then remove it</li>
+                            </ul>
+                            <p>Do please enjoy trying the puzzles. </p>
+                            <p>We do not promise that you will be able to solve all of these puzzles. If you get to a point where there is just one square still to be covered or where there are two squares that touch at a corner and not at a side then you
+                                may honourably give up on that puzzle.</p>
+                        </div>
+                        <!-- end of GG_text0_paras -->
+                        <div id="text0Navigation" class="GG_navigation">
+                            <button type="button" class="textButton leftButton" onclick="showIntroduction()">Previous</button>
+                            <button type="button" class="textButton rightButton" onclick="showPage1()">Next</button>
+                        </div>
+                    </div>
+                    <!-- end of Page 0 -->
+                    <!-- PAGE ONE - Puzzle No 1 -->
+                    <div id="GG_text1" class="GG_explanation">
+                        <h2 class="GG_textHeading">Puzzle No 1</h2>
+                        <div id="GG_text1_paras" class="GG_explanation_paras">
+                            <h3>Can you cover all the blank squares with marker tiles?</h3>
+                            <p>As you see two squares have been blocked off leaving you to try covering the rest.</p>
+                        </div>
+                        <!-- end of GG_text1_paras -->
+                        <div id="text1Navigation" class="GG_navigation">
+                            <button type="button" class="textButton leftButton" onclick="showPage0()">Previous</button>
+                            <button type="button" class="textButton rightButton" onclick="showPage2()">Next</button>
+                        </div>
+                    </div>
+                    <!-- end of Page 1 -->
+                    <!--  -->
+                    <!-- PAGE TWO - Puzzle No 2 -->
+                    <div id="GG_text2" class="GG_explanation">
+                        <h2 class="GG_textHeading">Puzzle No 2</h2>
+                        <div id="GG_text2_paras" class="GG_explanation_paras">
+                            <h3>Can you cover all the blank squares with marker tiles?</h3>
+                        </div>
+                        <!-- end of GG_text2_paras -->
+                        <div id="text1Navigation" class="GG_navigation">
+                            <button type="button" class="textButton leftButton" onclick="showPage1()">Previous</button>
+                            <button type="button" class="textButton rightButton" onclick="showPage3()">Next</button>
+                        </div>
+                    </div>
+                    <!-- end of Page 2 -->
+                    <!--  -->
+                    <!-- PAGE THREE - Puzzle No 3 -->
+                    <div id="GG_text3" class="GG_explanation">
+                        <h2 class="GG_textHeading">Puzzle No 3</h2>
+                        <div id="GG_text3_paras" class="GG_explanation_paras">
+                            <h3>Can you cover all the blank squares with marker tiles?</h3>
+                            <p>Again two squares have been blocked off leaving you to try covering the rest.</p>
+                        </div>
+                        <!-- end of GG_text3_paras -->
+                        <div id="text1Navigation" class="GG_navigation">
+                            <button type="button" class="textButton leftButton" onclick="showPage2()">Previous</button>
+                            <button type="button" class="textButton rightButton" onclick="showPage4()">Next</button>
+                        </div>
+                    </div>
+                    <!-- end of Page 3 -->
+                    <!--  -->
+                    <!-- PAGE FOUR - Puzzle No 4 -->
+                    <div id="GG_text4" class="GG_explanation">
+                        <h2 class="GG_textHeading">Puzzle No 4</h2>
+                        <div id="GG_text4_paras" class="GG_explanation_paras">
+                            <h3>Can you cover all the blank squares with marker tiles?</h3>
+                            <p>A different two squares have been blocked off this time. </p>
+                        </div>
+                        <!-- end of GG_text4_paras -->
+                        <div id="text1Navigation" class="GG_navigation">
+                            <button type="button" class="textButton leftButton" onclick="showPage3()">Previous</button>
+                            <button type="button" class="textButton rightButton" onclick="showPage5()">Next</button>
+                        </div>
+                    </div>
+                    <!-- end of Page 4 -->
+                    <!--  -->
+                    <!-- PAGE FIVE - Alphabet Puzzles -->
+                    <div id="GG_text5" class="GG_explanation">
+                        <h2 class="GG_textHeading">Alphabet Puzzles</h2>
+                        <div id="GG_text5_paras" class="GG_explanation_paras">
+                            <h3>Can you cover all the blank squares with marker tiles?</h3>
+                            <p>Select one of these buttons for the corresponding puzzle </p>
+                            <div id="GG_text5_alphaButtons">
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('A')">A</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('B')">B</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('C')">C</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('D')">D</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('E')">E</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('F')">F</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('G')">G</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('H')">H</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('I')">I</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('J')">J</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('K')">K</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('L')">L</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('M')">M</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('N')">N</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('O')">O</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('P')">P</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('Q')">Q</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('R')">R</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('S')">S</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('T')">T</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('U')">U</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('V')">V</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('W')">W</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('X')">X</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('Y')">Y</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('Z')">Z</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('0')">0</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('1')">1</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('2')">2</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('3')">3</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('4')">4</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('5')">5</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('6')">6</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('7')">7</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('8')">8</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('9')">9</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('?')">?</button>
+                                <button type="button" class="textButton" onclick="setUpAlphabetPuzzle('*')">*</button>
+                            </div>
+                            <p></p>
+                        </div>
+                        <!-- end of GG_text4_paras -->
+                        <div id="text1Navigation" class="GG_navigation">
+                            <button type="button" class="textButton leftButton" onclick="showPage4()">Previous</button>
+                        </div>
+                    </div>
+                    <!-- end of Page 4 -->
+                </div>
+                <!-- end of mainVariant_text -->
+            </div>
+            <!-- end of mainVariant_row_1 -->
+            <!-- Subsequent row - not used -->
+            <div id="mainVariant_row_Q1" class="GG_row GG_clueRow">
+            </div>
+            <!-- end of mainVariant_row_Q1 -->
+            <!--  -->
+        </div>
+        <!-- end of div_MainVariant -->
+        <div id="footerDiv" class="GG_row">
+            <p class="copyrightNotice">&copy Greg Gomberg 2020</p>
+        </div>
+    </div>
+    <!-- end of GG_maindiv -->
+    <script>
+        // ---------------------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------------
+        // Routines to display the intro and successive pages
+        //
+        // Make a block element - typically  a div visible or invisible
+        function GG_setBlockVisibilityById(elementId, visibility) {
+            GG_trace(6, "set visible " + elementId + "," + visibility);
+            var element = document.getElementById(elementId);
+            element.style.display = (visibility ? "block" : "none");
+        }
+        // Display routines
+        function setDefaultVisibilities() {
+            GG_setBlockVisibilityById("div_Introduction", false);
+            GG_setBlockVisibilityById("div_MainVariant", true);
+            GG_setBlockVisibilityById("GG_text0", false);
+            GG_setBlockVisibilityById("GG_text1", false);
+            GG_setBlockVisibilityById("GG_text2", false);
+            GG_setBlockVisibilityById("GG_text3", false);
+            GG_setBlockVisibilityById("GG_text4", false);
+            GG_setBlockVisibilityById("GG_text5", false);
+        }
+        //
+        function showIntroduction() {
+            GG_trace(3, "showIntroduction");
+            setDefaultVisibilities();
+            GG_setBlockVisibilityById("div_Introduction", true);
+            GG_setBlockVisibilityById("div_MainVariant", false);
+        }
+        //
+        function showPage0() {
+            GG_trace(3, "showPage0");
+            setDefaultVisibilities();
+            GG_setBlockVisibilityById("GG_text0", true);
+            currentPresetList = presetLists[0];
+            clearBoard();
+        }
+        //
+        function showPage1() {
+            GG_trace(3, "showPage1");
+            setDefaultVisibilities();
+            GG_setBlockVisibilityById("GG_text1", true);
+            currentPresetList = presetLists[1];
+            clearBoard();
+        }
+        //
+        function showPage2() {
+            GG_trace(3, "showPage2");
+            setDefaultVisibilities();
+            GG_setBlockVisibilityById("GG_text2", true);
+            currentPresetList = presetLists[2];
+            clearBoard();
+        }
+        //
+        function showPage3() {
+            GG_trace(3, "showPage3");
+            setDefaultVisibilities();
+            GG_setBlockVisibilityById("GG_text3", true);
+            currentPresetList = presetLists[3];
+            clearBoard();
+        }
+        //
+        function showPage4() {
+            GG_trace(3, "showPage4");
+            setDefaultVisibilities();
+            GG_setBlockVisibilityById("GG_text4", true);
+            currentPresetList = presetLists[4];
+            clearBoard();
+        }
+        //
+        function showPage5() { // Page 5 is for alphabet puzzles
+            GG_trace(3, "showPage5");
+            setDefaultVisibilities();
+            GG_setBlockVisibilityById("GG_text5", true);
+            setUpAlphabetPuzzle("?");
+        }
+        //
+        // -------------------------- TRACING -----------------
+        // Controls for tracing
+        var traceLevel = 5; // higher value for more detailed trace to console
+        // trace routine
+        function GG_trace(level, message) {
+            if (level <= traceLevel) {
+                console.info(message);
+            }
+        }
+        // -------------------------------------------
+        // initialiseBoard sets the contents of the board array to the same initial values as at its declaration
+        function initialiseBoard(presetList) {
+            var iRow, iCol;
+            // initialize the invisible border cells in rows 0 and 9
+            for (iCol = 0; iCol < 10; iCol++) {
+                board[0][iCol] = "X";
+                board[9][iCol] = "X";
+            }
+            // initialize rows 1 to 8
+            for (iRow = 1; iRow < 9; iRow++) {
+                // including invisible border cells in columns 0 and 9
+                board[iRow][0] = "X";
+                board[iRow][9] = "X";
+                // then empty columns 1 to 8
+                for (iCol = 1; iCol < 9; iCol++) {
+                    board[iRow][iCol] = " ";
+                }
+            }
+            // finally add presets from the preset list
+            var presetIndex;
+            for (presetIndex = 0; presetIndex < presetList.length; presetIndex++) {
+                iRow = presetList[presetIndex][0];
+                iCol = presetList[presetIndex][1];
+                board[iRow][iCol] = presetList[presetIndex][2];
+            }
+        }
+        // clearBoard initializes the board and other globals and 
+        // displays the result
+        function clearBoard() {
+            GG_trace(5, "clearBoard");
+            GG_trace(6, "Presets: " + currentPresetList.join("; "));
+            currentCellRow = 0;
+            currentCellColumn = 0;
+            currentCellClickTime = 0;
+            currentSequenceStartVal = " ";
+            initialiseBoard(currentPresetList);
+            updateBoardDisplay(1, 1, 8, 8);
+        }
+        // -------------------------------------------
+        // A click within a cell either continues the current sequence or starts a new one
+        // or does nothing at all in the case of a blocked cell.
+        function GG_cellClick(iRow, iCol) {
+            GG_trace(5, "Click - cell " + iRow + "," + iCol);
+            if (board[iRow][iCol] != "X") {
+                var previousClickTime = currentCellClickTime;
+                currentCellClickTime = Date.now();
+                if (currentCellRow == iRow && currentCellColumn == iCol && (currentCellClickTime - previousClickTime <= clickSequenceTimeLimit)) {
+                    continueClickSequence(iRow, iCol);
+                } else {
+                    startNewClickSequence(iRow, iCol);
+                }
+            }
+        }
+        //
+        // NB the following functions issue that the cell being processed is not blocked
+        //
+        // Leaving a cell terminates the current sequence
+        function GG_cellExit(iRow, iCol) {
+            GG_trace(7, "Exit - cell" + iRow + "," + iCol);
+            currentCellRow = 0;
+            currentCellColumn = 0;
+        }
+        //
+        function startNewClickSequence(iRow, iCol) {
+            currentCellRow = iRow;
+            currentCellColumn = iCol;
+            currentSequenceStartVal = board[iRow][iCol];
+            GG_trace(6, "new sequence at " + iRow + "," + iCol + " val=:" + currentSequenceStartVal + ":");
+            var nextVal = nextValidVal(iRow, iCol, currentSequenceStartVal);
+            if (nextVal != currentSequenceStartVal) {
+                if (currentSequenceStartVal == " ") {
+                    currentSequenceStartVal = nextVal;
+                }
+                setTile(iRow, iCol, nextVal);
+            }
+        }
+        //
+        function continueClickSequence(iRow, iCol) {
+            var currentCellContent = board[iRow][iCol];
+            GG_trace(6, "continue sequence at " + iRow + "," + iCol + " val=:" + currentCellContent + ":");
+            var nextVal = nextValidVal(iRow, iCol, currentCellContent);
+            if (nextVal == currentSequenceStartVal) {
+                // Sequence has now cycled through all available segment values
+                // Start again from blank
+                nextVal = " ";
+                currentCellClickTime = 0;
+            }
+            setTile(iRow, iCol, nextVal);
+        }
+        //
+        function nextValidVal(iRow, iCol, cellValue) {
+            var firstValue = cellValue;
+            var nextVal = firstValue;
+            do {
+                switch (nextVal) {
+                    // Generally just rotate clockwise
+                    case "L":
+                        nextVal = "T";
+                        break;
+                    case "R":
+                        nextVal = "B";
+                        break;
+                    case "B":
+                        nextVal = "L";
+                        break;
+                    case "T":
+                        nextVal = "R";
+                        break;
+                        // Special case for a blank cell, choose a value 
+                        // Here just arbitrarily start with the left segment.
+                        // NB setting firstValue 
+                    case " ":
+                        nextVal = "L";
+                        firstValue = "B";
+                        break;
+                }
+                GG_trace(7, "Next Valid, first val:" + firstValue + ":, trying :" + nextVal + ":");
+            }
+            while (nextVal != firstValue && !validValue(iRow, iCol, nextVal));
+            if (validValue(iRow, iCol, nextVal)) {
+                return nextVal;
+            } else {
+                return " ";
+            }
+        }
+        //
+        function validValue(iRow, iCol, value) {
+            // blank always considered valid 
+            if (value == " ") {
+                return true;
+            } else {
+                var joiningCellVal = board[joiningCellRow(iRow, value)][joiningCellCol(iCol, value)];
+                return (joiningCellVal == " " || joiningCellVal == joiningCellValOK(value));
+            }
+        }
+        // setTile assumes the validity of the new value has already been checked
+        function setTile(iRow, iCol, newValue) {
+            var oldValue = board[iRow][iCol];
+            if (oldValue == newValue) {
+                return;
+            } else {
+                board[joiningCellRow(iRow, oldValue)][joiningCellCol(iCol, oldValue)] = " ";
+                board[iRow][iCol] = newValue;
+                board[joiningCellRow(iRow, newValue)][joiningCellCol(iCol, newValue)] = joiningCellValOK(newValue);
+                // simplify code: redraw the 3 x 3 square centered on the given cell
+                updateBoardDisplay(iRow - 1, iCol - 1, iRow + 1, iCol + 1);
+            }
+        }
+        //
+        function joiningCellRow(iRow, value) {
+            switch (value) {
+                case "L":
+                case "R":
+                    return iRow;
+                    break;
+                case "B":
+                    return iRow + 1;
+                    break;
+                case "T":
+                    return iRow - 1;
+                    break;
+                default:
+                    return iRow;
+                    break;
+            }
+        }
+        //
+        function joiningCellCol(iCol, value) {
+            switch (value) {
+                case "L":
+                    return iCol - 1;
+                case "R":
+                    return iCol + 1;
+                    break;
+                case "B":
+                case "T":
+                    return iCol;
+                    break;
+                default:
+                    return iCol;
+                    break;
+            }
+        }
+        //
+        function joiningCellValOK(value) {
+            switch (value) {
+                case "L":
+                    return "R";
+                    break;
+                case "R":
+                    return "L";
+                    break;
+                case "B":
+                    return "T";
+                    break;
+                case "T":
+                    return "B";
+                    break;
+                default:
+                    return " ";
+                    break;
+            }
+        }
+
+        //
+        function updateBoardDisplay(iFirstRow, iFirstColumn, iLastRow, iLastColumn) {
+            iFirstRow = Math.max(iFirstRow, 1);
+            iLastRow = Math.min(iLastRow, 8);
+            iFirstColumn = Math.max(iFirstColumn, 1);
+            iLastColumn = Math.min(iLastColumn, 8);
+            var iRow, iColumn;
+            for (iRow = iFirstRow; iRow <= iLastRow; iRow++) {
+                for (iColumn = iFirstColumn; iColumn <= iLastColumn; iColumn++) {
+                    var elementCell = document.getElementById("SVG_Cell_" + iRow + "_" + iColumn);
+                    var elementSegM = document.getElementById("SVG_Seg_" + iRow + "_" + iColumn + "_M");
+                    var elementSegL = document.getElementById("SVG_Seg_" + iRow + "_" + iColumn + "_L");
+                    var elementSegR = document.getElementById("SVG_Seg_" + iRow + "_" + iColumn + "_R");
+                    var elementSegB = document.getElementById("SVG_Seg_" + iRow + "_" + iColumn + "_B");
+                    var elementSegT = document.getElementById("SVG_Seg_" + iRow + "_" + iColumn + "_T");
+                    switch (board[iRow][iColumn]) {
+                        case " ":
+                            GG_trace(8, "updating cell " + iRow + "," + iColumn + " space");
+                            elementCell.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegM.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegL.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegR.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegB.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegT.setAttributeNS(null, 'fill-opacity', "0");
+                            break;
+                        case "L":
+                            GG_trace(8, "updating cell " + iRow + "," + iColumn + " Left");
+                            elementCell.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegM.setAttributeNS(null, 'fill-opacity', "1");
+                            elementSegL.setAttributeNS(null, 'fill-opacity', "1");
+                            elementSegR.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegB.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegT.setAttributeNS(null, 'fill-opacity', "0");
+                            break;
+                        case "R":
+                            GG_trace(8, "updating cell " + iRow + "," + iColumn + " Right");
+                            elementCell.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegM.setAttributeNS(null, 'fill-opacity', "1");
+                            elementSegL.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegR.setAttributeNS(null, 'fill-opacity', "1");
+                            elementSegB.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegT.setAttributeNS(null, 'fill-opacity', "0");
+                            break;
+                        case "B":
+                            GG_trace(8, "updating cell " + iRow + "," + iColumn + " Bottom");
+                            elementCell.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegM.setAttributeNS(null, 'fill-opacity', "1");
+                            elementSegL.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegR.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegB.setAttributeNS(null, 'fill-opacity', "1");
+                            elementSegT.setAttributeNS(null, 'fill-opacity', "0");
+                            break;
+                        case "T":
+                            GG_trace(8, "updating cell " + iRow + "," + iColumn + " Top");
+                            elementCell.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegM.setAttributeNS(null, 'fill-opacity', "1");
+                            elementSegL.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegR.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegB.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegT.setAttributeNS(null, 'fill-opacity', "1");
+                            break;
+                        case "X":
+                            GG_trace(8, "updating cell " + iRow + "," + iColumn + " blocked");
+                            elementCell.setAttributeNS(null, 'fill-opacity', "1");
+                            elementSegM.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegL.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegR.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegB.setAttributeNS(null, 'fill-opacity', "0");
+                            elementSegT.setAttributeNS(null, 'fill-opacity', "0");
+                    }
+                }
+            }
+        }
+        ///////////////////////////
+        // Functions to support alphabet puzzle collection
+        ///////////////////////////
+        // But first set up the font defintion as an array based on a fuller definition from:
+        /**
+         * from: https://github.com/dhepper/font8x8/blob/master/font8x8_basic.h
+         *
+         * 8x8 monochrome bitmap fonts for rendering
+         * Author: Daniel Hepper <daniel@hepper.net>
+         *
+         * License: Public Domain
+         *
+         * Based on:
+         * // Summary: font8x8.h
+         * // 8x8 monochrome bitmap fonts for rendering
+         * //
+         * // Author:
+         * //     Marcel Sondaar
+         * //     International Business Machines (public domain VGA fonts)
+         * //
+         * // License:
+         * //     Public Domain
+         *
+         * Fetched from: http://dimensionalrift.homelinux.net/combuster/mos3/?p=viewsource&file=/modules/gfx/font8_8.asm
+         *
+         * Transcribed to Javascript and adapted for puzzles by Greg Gomberg September 2020
+         **/
+
+        // Constant: font8x8_basic
+        // Contains an 8x8 font map for unicode points U+0000 - U+007F (basic latin)
+        // NB bitmap is in rows starting at the top and in each row the bits
+        //    run least significant to most significant representing pixels left to right
+        var basic8x8BitmapFont = [
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0000 (nul)
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0001
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0002
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0003
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0004
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0005
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0006
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0007
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0008
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0009
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+000A
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+000B
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+000C
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+000D
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+000E
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+000F
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0010
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0011
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0012
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0013
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0014
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0015
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0016
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0017
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0018
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0019
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+001A
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+001B
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+001C
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+001D
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+001E
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+001F
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0020 (space)
+            [0x18, 0x3C, 0x3C, 0x18, 0x18, 0x00, 0x18, 0x00], // U+0021 (!)
+            [0x36, 0x36, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0022 (")
+            [0x36, 0x36, 0x7F, 0x36, 0x7F, 0x36, 0x36, 0x00], // U+0023 (#)
+            [0x0C, 0x3E, 0x03, 0x1E, 0x30, 0x1F, 0x0C, 0x00], // U+0024 ($)
+            [0x00, 0x63, 0x33, 0x18, 0x0C, 0x66, 0x63, 0x00], // U+0025 (%)
+            [0x1C, 0x36, 0x1C, 0x6E, 0x3B, 0x33, 0x6E, 0x00], // U+0026 (&)
+            [0x06, 0x06, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0027 (')
+            [0x18, 0x0C, 0x06, 0x06, 0x06, 0x0C, 0x18, 0x00], // U+0028 (()
+            [0x06, 0x0C, 0x18, 0x18, 0x18, 0x0C, 0x06, 0x00], // U+0029 ())
+            [0x00, 0x66, 0x3C, 0xFF, 0x3C, 0x66, 0x00, 0x00], // U+002A (*)
+            [0x00, 0x0C, 0x0C, 0x3F, 0x0C, 0x0C, 0x00, 0x00], // U+002B (+)
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x0C, 0x06], // U+002C (,)
+            [0x00, 0x00, 0x00, 0x3F, 0x00, 0x00, 0x00, 0x00], // U+002D (-)
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x0C, 0x0C, 0x00], // U+002E (.)
+            [0x60, 0x30, 0x18, 0x0C, 0x06, 0x03, 0x01, 0x00], // U+002F (/)
+            // [0x3E, 0x63, 0x73, 0x7B, 0x6F, 0x67, 0x3E, 0x00], // U+0030 (0) - orig
+            [0x3E, 0x22, 0x63, 0x63, 0x63, 0x27, 0x3E, 0x00], // U+0030 (0)
+            // [0x0C, 0x0E, 0x0C, 0x0C, 0x0C, 0x0C, 0x3F, 0x00], // U+0031 (1) - orig
+            [0x08, 0x0E, 0x0C, 0x0C, 0x0C, 0x0C, 0x3F, 0x00], // U+0031 (1)
+            // [0x1E, 0x33, 0x30, 0x1C, 0x06, 0x33, 0x3F, 0x00], // U+0032 (2) - orig
+            [0x3E, 0x32, 0x31, 0x1C, 0x06, 0x33, 0x3F, 0x00], // U+0032 (2)
+            // [0x1E, 0x33, 0x30, 0x1C, 0x30, 0x33, 0x1E, 0x00], // U+0033 (3) - orig
+            [0x1E, 0x32, 0x33, 0x1C, 0x30, 0x33, 0x1E, 0x00], // U+0033 (3)
+            // [0x38, 0x3C, 0x36, 0x33, 0x7F, 0x30, 0x78, 0x00], // U+0034 (4) - orig
+            [0x3C, 0x34, 0x37, 0x73, 0x7F, 0x30, 0x78, 0x00], // U+0034 (4)
+            // [0x3F, 0x03, 0x1F, 0x30, 0x30, 0x33, 0x1E, 0x00], // U+0035 (5) - orig
+            [0x3F, 0x03, 0x1F, 0x30, 0x30, 0x33, 0x3E, 0x00], // U+0035 (5)
+            // [0x1C, 0x06, 0x03, 0x1F, 0x33, 0x33, 0x1E, 0x00], // U+0036 (6) - orig
+            [0x1C, 0x06, 0x02, 0x1F, 0x13, 0x33, 0x1E, 0x00], // U+0036 (6)
+            // [0x3F, 0x33, 0x30, 0x18, 0x0C, 0x0C, 0x0C, 0x00], // U+0037 (7) - orig
+            [0x1F, 0x31, 0x30, 0x18, 0x0C, 0x0C, 0x0C, 0x00], // U+0037 (7)
+            // [0x1E, 0x33, 0x33, 0x1E, 0x33, 0x33, 0x1E, 0x00], // U+0038 (8) - orig
+            [0x1E, 0x32, 0x33, 0x1E, 0x32, 0x33, 0x1E, 0x00], // U+0038 (8)
+            // [0x1E, 0x33, 0x33, 0x3E, 0x30, 0x18, 0x0E, 0x00], // U+0039 (9) - orig
+            [0x1E, 0x32, 0x33, 0x3F, 0x30, 0x18, 0x0E, 0x00], // U+0039 (9)
+            [0x00, 0x0C, 0x0C, 0x00, 0x00, 0x0C, 0x0C, 0x00], // U+003A (:)
+            [0x00, 0x0C, 0x0C, 0x00, 0x00, 0x0C, 0x0C, 0x06], // U+003B (;)
+            [0x18, 0x0C, 0x06, 0x03, 0x06, 0x0C, 0x18, 0x00], // U+003C (<)
+            [0x00, 0x00, 0x3F, 0x00, 0x00, 0x3F, 0x00, 0x00], // U+003D (=)
+            [0x06, 0x0C, 0x18, 0x30, 0x18, 0x0C, 0x06, 0x00], // U+003E (>)
+            // [0x1E, 0x33, 0x30, 0x18, 0x0C, 0x00, 0x0C, 0x00], // U+003F (?) - orig
+            [0x1E, 0x32, 0x32, 0x18, 0x0C, 0x00, 0x0C, 0x00], // U+003F (?)
+            [0x3E, 0x63, 0x7B, 0x7B, 0x7B, 0x03, 0x1E, 0x00], // U+0040 (@)
+            // [0x0C, 0x1E, 0x33, 0x33, 0x3F, 0x33, 0x33, 0x00], // U+0041 (A) - orig
+            [0x0C, 0x1E, 0x12, 0x12, 0x1e, 0x33, 0x33, 0x00], // U+0041 (A)
+            // [0x3F, 0x66, 0x66, 0x3E, 0x66, 0x66, 0x3F, 0x00], // U+0042 (B) - orig
+            [0x3E, 0x66, 0x66, 0x3E, 0x66, 0x66, 0x3F, 0x00], // U+0042 (B)
+            // [0x3C, 0x66, 0x03, 0x03, 0x03, 0x66, 0x3C, 0x00], // U+0043 (C) - orig
+            [0x3C, 0x66, 0x42, 0x03, 0x42, 0x66, 0x3C, 0x00], // U+0043 (C)
+            // [0x1F, 0x36, 0x66, 0x66, 0x66, 0x36, 0x1F, 0x00], // U+0044 (D) - orig
+            [0x3E, 0x24, 0x24, 0x24, 0x24, 0x26, 0x3F, 0x00], // U+0044 (D)
+            // [0x7F, 0x46, 0x16, 0x1E, 0x16, 0x46, 0x7F, 0x00], // U+0045 (E) - orig
+            [0x7E, 0x46, 0x16, 0x1E, 0x16, 0x46, 0x7E, 0x00], // U+0045 (E)
+            // [0x7F, 0x46, 0x16, 0x1E, 0x16, 0x06, 0x0F, 0x00], // U+0046 (F) - orig
+            [0x3E, 0x46, 0x16, 0x1E, 0x16, 0x06, 0x0F, 0x00], // U+0046 (F)
+            // [0x3C, 0x66, 0x03, 0x03, 0x73, 0x66, 0x7C, 0x00], // U+0047 (G) - orig
+            [0x3C, 0x66, 0x02, 0x03, 0x72, 0x66, 0x7C, 0x00], // U+0047 (G)
+            [0x33, 0x33, 0x33, 0x3F, 0x33, 0x33, 0x33, 0x00], // U+0048 (H)
+            // [0x1E, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x1E, 0x00], // U+0049 (I) - orig
+            [0x1E, 0x08, 0x08, 0x08, 0x0C, 0x1C, 0x3F, 0x00], // U+0049 (I)
+            // [0x78, 0x30, 0x30, 0x30, 0x33, 0x33, 0x1E, 0x00], // U+004A (J) - orig
+            [0x78, 0x30, 0x30, 0x30, 0x31, 0x13, 0x1E, 0x00], // U+004A (J)
+            // [0x67, 0x66, 0x36, 0x1E, 0x36, 0x66, 0x67, 0x00], // U+004B (K) - orig
+            [0x66, 0x46, 0x76, 0x1E, 0x76, 0x46, 0x66, 0x00], // U+004B (K)
+            // [0x0F, 0x06, 0x06, 0x06, 0x46, 0x66, 0x7F, 0x00], // U+004C (L) - orig
+            [0x0F, 0x06, 0x06, 0x06, 0x46, 0x66, 0x7E, 0x00], // U+004C (L)
+            // [0x63, 0x77, 0x7F, 0x7F, 0x6B, 0x63, 0x63, 0x00], // U+004D (M) - orig
+            [0x41, 0x77, 0x7F, 0x7F, 0x6B, 0x63, 0x43, 0x00], // U+004D (M)
+            // [0x63, 0x67, 0x6F, 0x7B, 0x73, 0x63, 0x63, 0x00], // U+004E (N) - orig
+            [0x21, 0x63, 0x6F, 0x7B, 0x63, 0x63, 0x63, 0x00], // U+004E (N)
+            // [0x1C, 0x36, 0x63, 0x63, 0x63, 0x36, 0x1C, 0x00], // U+004F (O) - orig
+            [0x1C, 0x3E, 0x22, 0x63, 0x22, 0x3A, 0x1E, 0x00], // U+004F (O)
+            // [0x3F, 0x66, 0x66, 0x3E, 0x06, 0x06, 0x0F, 0x00], // U+0050 (P) - orig
+            [0x3E, 0x66, 0x66, 0x3E, 0x06, 0x06, 0x0F, 0x00], // U+0050 (P)
+            // [0x1E, 0x33, 0x33, 0x33, 0x3B, 0x1E, 0x38, 0x00], // U+0051 (Q) - orig
+            [0x1E, 0x32, 0x33, 0x33, 0x33, 0x1E, 0x38, 0x00], // U+0051 (Q)
+            // [0x3F, 0x66, 0x66, 0x3E, 0x36, 0x66, 0x67, 0x00], // U+0052 (R) - orig
+            [0x3E, 0x66, 0x66, 0x3E, 0x26, 0x66, 0x67, 0x00], // U+0052 (R)
+            // [0x1E, 0x33, 0x07, 0x0E, 0x38, 0x33, 0x1E, 0x00], // U+0053 (S) - orig
+            [0x1E, 0x12, 0x27, 0x0E, 0x38, 0x33, 0x1E, 0x00], // U+0053 (S)
+            // [0x3F, 0x2D, 0x0C, 0x0C, 0x0C, 0x0C, 0x1E, 0x00], // U+0054 (T) - orig
+            [0x3F, 0x2D, 0x2D, 0x0C, 0x0C, 0x0C, 0x1E, 0x00], // U+0054 (T)
+            [0x33, 0x33, 0x33, 0x33, 0x33, 0x33, 0x3F, 0x00], // U+0055 (U)
+            // [0x33, 0x33, 0x33, 0x33, 0x33, 0x1E, 0x0C, 0x00], // U+0056 (V) - orig
+            [0x33, 0x33, 0x33, 0x33, 0x32, 0x3E, 0x0C, 0x00], // U+0056 (V)
+            // [0x63, 0x63, 0x63, 0x6B, 0x7F, 0x77, 0x63, 0x00], // U+0057 (W) - orig
+            [0x63, 0x63, 0x6B, 0x6B, 0x77, 0x77, 0x63, 0x00], // U+0057 (W)
+            // [0x63, 0x63, 0x36, 0x1C, 0x1C, 0x36, 0x63, 0x00], // U+0058 (X) - orig
+            [0x63, 0x63, 0x3E, 0x1C, 0x14, 0x36, 0x63, 0x00], // U+0058 (X)
+            [0x33, 0x33, 0x33, 0x1E, 0x0C, 0x0C, 0x1E, 0x00], // U+0059 (Y)
+            // [0x7F, 0x63, 0x31, 0x18, 0x4C, 0x66, 0x7F, 0x00], // U+005A (Z) - orig
+            [0x7F, 0x67, 0x33, 0x19, 0x4C, 0x67, 0x7F, 0x00], // U+005A (Z)
+            [0x1E, 0x06, 0x06, 0x06, 0x06, 0x06, 0x1E, 0x00], // U+005B ([)
+            [0x03, 0x06, 0x0C, 0x18, 0x30, 0x60, 0x40, 0x00], // U+005C (\)
+            [0x1E, 0x18, 0x18, 0x18, 0x18, 0x18, 0x1E, 0x00], // U+005D (])
+            [0x08, 0x1C, 0x36, 0x63, 0x00, 0x00, 0x00, 0x00], // U+005E (^)
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF], // U+005F (_)
+            [0x0C, 0x0C, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00], // U+0060 (`)
+            [0x00, 0x00, 0x1E, 0x30, 0x3E, 0x33, 0x6E, 0x00], // U+0061 (a)
+            [0x07, 0x06, 0x06, 0x3E, 0x66, 0x66, 0x3B, 0x00], // U+0062 (b)
+            [0x00, 0x00, 0x1E, 0x33, 0x03, 0x33, 0x1E, 0x00], // U+0063 (c)
+            [0x38, 0x30, 0x30, 0x3e, 0x33, 0x33, 0x6E, 0x00], // U+0064 (d)
+            [0x00, 0x00, 0x1E, 0x33, 0x3f, 0x03, 0x1E, 0x00], // U+0065 (e)
+            [0x1C, 0x36, 0x06, 0x0f, 0x06, 0x06, 0x0F, 0x00], // U+0066 (f)
+            [0x00, 0x00, 0x6E, 0x33, 0x33, 0x3E, 0x30, 0x1F], // U+0067 (g)
+            [0x07, 0x06, 0x36, 0x6E, 0x66, 0x66, 0x67, 0x00], // U+0068 (h)
+            [0x0C, 0x00, 0x0E, 0x0C, 0x0C, 0x0C, 0x1E, 0x00], // U+0069 (i)
+            [0x30, 0x00, 0x30, 0x30, 0x30, 0x33, 0x33, 0x1E], // U+006A (j)
+            [0x07, 0x06, 0x66, 0x36, 0x1E, 0x36, 0x67, 0x00], // U+006B (k)
+            [0x0E, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x1E, 0x00], // U+006C (l)
+            [0x00, 0x00, 0x33, 0x7F, 0x7F, 0x6B, 0x63, 0x00], // U+006D (m)
+            [0x00, 0x00, 0x1F, 0x33, 0x33, 0x33, 0x33, 0x00], // U+006E (n)
+            [0x00, 0x00, 0x1E, 0x33, 0x33, 0x33, 0x1E, 0x00], // U+006F (o)
+            [0x00, 0x00, 0x3B, 0x66, 0x66, 0x3E, 0x06, 0x0F], // U+0070 (p)
+            [0x00, 0x00, 0x6E, 0x33, 0x33, 0x3E, 0x30, 0x78], // U+0071 (q)
+            [0x00, 0x00, 0x3B, 0x6E, 0x66, 0x06, 0x0F, 0x00], // U+0072 (r)
+            [0x00, 0x00, 0x3E, 0x03, 0x1E, 0x30, 0x1F, 0x00], // U+0073 (s)
+            [0x08, 0x0C, 0x3E, 0x0C, 0x0C, 0x2C, 0x18, 0x00], // U+0074 (t)
+            [0x00, 0x00, 0x33, 0x33, 0x33, 0x33, 0x6E, 0x00], // U+0075 (u)
+            [0x00, 0x00, 0x33, 0x33, 0x33, 0x1E, 0x0C, 0x00], // U+0076 (v)
+            [0x00, 0x00, 0x63, 0x6B, 0x7F, 0x7F, 0x36, 0x00], // U+0077 (w)
+            [0x00, 0x00, 0x63, 0x36, 0x1C, 0x36, 0x63, 0x00], // U+0078 (x)
+            [0x00, 0x00, 0x33, 0x33, 0x33, 0x3E, 0x30, 0x1F], // U+0079 (y)
+            [0x00, 0x00, 0x3F, 0x19, 0x0C, 0x26, 0x3F, 0x00], // U+007A (z)
+            [0x38, 0x0C, 0x0C, 0x07, 0x0C, 0x0C, 0x38, 0x00], // U+007B ([)
+            [0x18, 0x18, 0x18, 0x00, 0x18, 0x18, 0x18, 0x00], // U+007C (|)
+            [0x07, 0x0C, 0x0C, 0x38, 0x0C, 0x0C, 0x07, 0x00], // U+007D (])
+            [0x6E, 0x3B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00], // U+007E (~)
+            [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00] // U+007F
+        ];
+        // Function takes a string and calculates the presetList representing the board for a puzzle based on the 
+        // first [usually only] character of the string provided and sets this as the currentPresetList
+        function setUpAlphabetPuzzle(characterString) {
+            GG_trace(4, "setUpFontBoardPresets :" + characterString);
+            var characterCode = characterString.charCodeAt(0);
+            // If outside the range SPACE - TILDE set the code to SPACE
+            // Please excuse the hard coded (but well-known) constants
+            if (isNaN(characterCode) || characterCode < 32 || characterCode > 126) {
+                characterCode = 32;
+            }
+            var characterBitmap = basic8x8BitmapFont[characterCode]
+            var myPresetList = []
+            GG_trace(7, "setUpFontBoardPresets code:" + characterCode + ": bitmap:" + characterBitmap);
+            var iRow;
+            for (iRow = 1; iRow <= 8; iRow++) {
+                var bitmapRowValue = characterBitmap[iRow - 1];
+                var iCol, iColMask;
+                for (iCol = 1, iColMask = 1; iCol <= 8; iCol++, iColMask *= 2)
+                    if ((bitmapRowValue & iColMask) != 0) {
+                        myPresetList.push([iRow, iCol, 'X']);
+                    }
+            }
+            currentPresetList = myPresetList;
+            clearBoard();
+            GG_trace(6, "setUpFontBoardPresets code:" + characterCode + ": presets:" + currentPresetList.join("; "));
+        }
+        //
+
+        /////////////////////////////////////////////
+        ///////////////////END OF function definitions
+        ////////////////////////////////////////////
+        //
+        // Create array representation of board
+        // Note that this is 10 x 10 with a 1 cell border marked "X" for blocked all around
+        // The idea is just to reduce special case code required to process cells from (1,1) to (8,8) 
+        // that represent the actual 8 x 8 board.
+        var board = [
+            ["X", "X", "X", "X", "X", "X", "X", "X", "X", "X"],
+            ["X", " ", " ", " ", " ", " ", " ", " ", " ", "X"],
+            ["X", " ", " ", " ", " ", " ", " ", " ", " ", "X"],
+            ["X", " ", " ", " ", " ", " ", " ", " ", " ", "X"],
+            ["X", " ", " ", " ", " ", " ", " ", " ", " ", "X"],
+            ["X", " ", " ", " ", " ", " ", " ", " ", " ", "X"],
+            ["X", " ", " ", " ", " ", " ", " ", " ", " ", "X"],
+            ["X", " ", " ", " ", " ", " ", " ", " ", " ", "X"],
+            ["X", " ", " ", " ", " ", " ", " ", " ", " ", "X"],
+            ["X", "X", "X", "X", "X", "X", "X", "X", "X", "X"]
+        ];
+        // Preset lists representing various versions of the puzzle
+        var presetLists = [
+            [],
+            [
+                [1, 6, "X"],
+                [8, 6, "X"]
+            ],
+            [
+                [1, 5, "X"],
+                [8, 7, "X"]
+            ],
+            [
+                [6, 1, "X"],
+                [5, 8, "X"]
+            ],
+            [
+                [1, 8, "X"],
+                [8, 1, "X"]
+            ],
+            [
+                [8, 1, "X"],
+                [8, 2, "X"],
+                [8, 3, "X"],
+                [8, 4, "X"],
+                [8, 5, "X"],
+                [8, 6, "X"],
+                [8, 7, "X"],
+                [8, 8, "X"],
+                [7, 8, "X"],
+                [6, 8, "X"],
+                [5, 8, "X"],
+                [4, 8, "X"],
+                [3, 8, "X"],
+                [2, 8, "X"],
+                [1, 8, "X"]
+            ]
+        ];
+        var currentPresetList = presetLists[0];
+        // -------------------------------------------
+        // -------------------------------------------
+        // Board UI state variables. These define the current sequence, if any.
+        // A sequence is a number of consecutive clicks in the same cell
+        // with each click being within the time limit of the previous one.
+        // During a sequence we cycle through all possible tiles covering that cell 
+        // and an adjacent empty cell and blank.
+        var currentCellRow = 0;
+        var currentCellColumn = 0;
+        var currentCellClickTime = 0;
+        var currentSequenceStartVal = " ";
+        // Board UI parameters
+        var clickSequenceTimeLimit = 3000; //milliseconds
+        // -------------------------------------------
+        // Start by displaying the introduction
+        showIntroduction();
+        // After this just wait for clicks
+        // -------------------------------------------
+        //
+    </script>
+</body>
+<!-- Copyright Greg Gomberg 2020 
+      May be used free of charge. Selling without prior written consent prohibited. 
+      Obtain permission before redistributing. In all cases this notice must remain intact. -->
+
+</html>
